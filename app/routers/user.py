@@ -1,11 +1,10 @@
 """
-This code defines a FastAPI router for user management,
-including a route to create a new user.
+API endpoints to handle requests
 """
-from uuid import uuid4
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, Depends, status, HTTPException
 from app.models.user import UserModel
 from app.schemas.user import UserCreate, UserOut
+from app.utils.auth import get_current_user, hash_password
 
 
 router = APIRouter(
@@ -32,21 +31,27 @@ async def create_user(user: UserCreate):
     user_data = new_func(user)
     new_user = await UserModel.create(user_data)
     return {
-        "id": str(uuid4()),  # Generate a unique ID for the user
+        "id": new_user["_id"],
         "email": new_user["email"],
-        "name": new_user.get("name", ""),
-        "created_at": new_user.get("created_at", ""),
+        "first_name": new_user["first_name"],
+        "last_name": new_user["last_name"],
+        "date_of_birth": new_user["date_of_birth"],
+        "phone_number": new_user["phone_number"],
+        "address": new_user["address"],
+        "gender": new_user["gender"],
+        "role": new_user["role"],
     }
 
 
 def new_func(user):
     """Helper function to convert user schema to dictionary."""
     user_data = user.dict()
+    user_data["password"] = hash_password(user.password)
     return user_data
 
 
 @router.get("/", response_model=list[UserOut])
-async def list_users():
+async def list_users(current_user: dict = Depends(get_current_user)):
     """
     Retrieve all users in the system.
     """

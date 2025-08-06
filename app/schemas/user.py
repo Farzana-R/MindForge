@@ -1,5 +1,4 @@
-"""User schema definitions for the application.
-This module defines the data models for user-related operations."""
+"""pydantic models - validates request/response"""
 
 from enum import Enum
 from pydantic import BaseModel, EmailStr, Field
