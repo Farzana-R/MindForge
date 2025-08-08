@@ -4,7 +4,8 @@ API endpoints to handle requests
 from fastapi import APIRouter, Depends, status, HTTPException
 from app.models.user import UserModel
 from app.schemas.user import UserCreate, UserOut
-from app.utils.auth import get_current_user, hash_password
+from app.utils.auth import hash_password
+from app.dependencies.auth import get_current_user
 
 
 router = APIRouter(
@@ -70,3 +71,8 @@ async def list_users(current_user: dict = Depends(get_current_user)):
             "gender": user["gender"],
         })
     return users
+
+@router.get("/user/profile")
+async def profile(user=Depends(get_current_user)):
+    """Retrieve the profile of the current user."""
+    return {"email": user["email"], "role": user["role"]}
