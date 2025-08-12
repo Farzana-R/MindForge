@@ -14,7 +14,7 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-@router.post("/", response_model=CourseOut, dependencies=[Depends(require_role("instructor", "admin"))])
+@router.post("/", response_model=CourseOut)
 async def create_course(
     course: CourseCreate,
     user=Depends(require_role("instructor", "admin"))

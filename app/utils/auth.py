@@ -2,10 +2,8 @@
 from datetime import datetime, timedelta, timezone
 from passlib.context import CryptContext
 from jose import jwt, JWTError
-from fastapi import Depends, HTTPException, status
+from fastapi import HTTPException, status
 from app.core.config import settings
-from app.core.security import oauth2_scheme
-from app.models.user import UserModel
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -34,3 +32,15 @@ def create_access_token(data: dict, expires_delta: int = None):
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
+
+def decode_access_token(token: str):
+    """Decode a JWT access token and return the payload."""
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        return payload
+    except JWTError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from exc
