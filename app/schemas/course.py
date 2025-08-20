@@ -28,3 +28,22 @@ class CourseOut(CourseBase):
                             description="The date and time when the course was created")
     updated_at: Optional[str] = Field(...,
                             description="The date and time when the course was last updated")
+    
+
+class CourseUpdate(BaseModel):
+    title: Optional[str] = Field(None, min_length=1, max_length=100)
+    description: Optional[str] = Field(None, min_length=10, max_length=500)
+    category: Optional[str] = Field(None, description="The category of the course")
+
+class CourseUpdateOut(CourseUpdate):
+    id: str = Field(..., description="The unique identifier for the course")
+    instructor: str = Field(..., description="The name of the instructor")
+    created_at: Optional[str] = Field(...,
+                            description="The date and time when the course was created")
+    updated_at: Optional[str] = Field(...,
+                            description="The date and time when the course was last updated")
+    
+class PaginatedCourses(BaseModel):
+    """Model for paginated course results."""
+    total: int = Field(..., description="Total number of courses")
+    data: list[CourseOut] = Field(..., description="List of courses in the current page")

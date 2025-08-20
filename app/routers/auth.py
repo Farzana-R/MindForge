@@ -1,7 +1,8 @@
+"""Authentication and User Management Router"""
 from datetime import datetime, timezone
 from fastapi import APIRouter, status, HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
-from app.schemas.user import UserCreate, UserOut, UserSignup
+from app.schemas.user import UserOut, UserSignup
 from app.utils.auth import hash_password, verify_password, create_access_token
 from app.schemas.token import Token
 from app.models.user import UserModel

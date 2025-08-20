@@ -37,8 +37,17 @@ class UserCreate(UserBase):
 class UserOut(UserBase):
     """Model for outputting user data."""
     id: str = Field(..., description="The unique identifier for the user")
-    created_at: str
-    updated_at: str
+    created_at: Optional[str] = Field(None)
+    updated_at: Optional[str] = Field(None)
+
+
+class PaginatedUsers(BaseModel):
+    """Model for paginated user responses."""
+    page: int
+    limit: int
+    total_users: int
+    total_pages: int
+    users: list[UserOut]
 
 
 class UserSignup(BaseModel):
@@ -55,3 +64,13 @@ class UserSignup(BaseModel):
         examples=["male", "female", "other"]
     )
     password: str = Field(..., min_length=8)
+
+
+class ProfileUpdate(BaseModel):
+    """Schema for updating user profile."""
+    first_name: Optional[str] = Field(None, min_length=1, max_length=50)
+    last_name: Optional[str] = Field(None, min_length=1, max_length=50)
+    date_of_birth: Optional[str] = Field(None)  # You can switch to date type if needed
+    phone_number: Optional[str] = Field(None, min_length=8, max_length=15)
+    address: Optional[str] = Field(None, max_length=255)
+    gender: Optional[str] = Field(None, pattern="^(male|female|other)$")

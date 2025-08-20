@@ -11,3 +11,4 @@ bcrypt==3.2.2
 passlib==1.7.4
 # for OAuth2PasswordRequestForm (for handling form data in login route)
 python-multipart==0.0.20
+Faker==37.5.3
