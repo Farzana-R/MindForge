@@ -1,0 +1,27 @@
+# this will run fastapi and mongodb together
+version: '3.9'
+
+services:
+  web:
+    build: .
+    container_name: mindforge_api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGODB_URL=mongodb://mongo:27017
+      - DB_NAME=mindforge_db
+    volumes:
+      - .:/app #live reload for development
+
+  mongo:
+    image: mongo:6.0
+    container_name: mindforge_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+  
+volumes:
+  mongo_data:
