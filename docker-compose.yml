@@ -10,7 +10,7 @@ services:
     depends_on:
       - mongo
     environment:
-      - MONGODB_URL=mongodb://mongo:27017
+      - MONGO_URL=mongodb://mongo:27017
       - DB_NAME=mindforge_db
     volumes:
       - .:/app #live reload for development
