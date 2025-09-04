@@ -1,6 +1,6 @@
 # 🧠 MindForge - LMS Backend (FastAPI + MongoDB)
 
-[![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Backend-teal?logo=fastapi)](https://fastapi.tiangolo.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Database-brightgreen?logo=mongodb)](https://www.mongodb.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -27,7 +27,7 @@ It supports user registration, role-based access, JWT authentication, and will s
 - **Auth:** JWT tokens, Passlib (bcrypt)
 - **Validation:** Pydantic
 - **Testing Data:** Faker
-- **Containerization:** Docker (coming soon)
+- **Containerization:** Docker
 
 ---
 
@@ -55,14 +55,10 @@ fastapi-lms/
 - Include the token in headers:
 
 
-Authorization: Bearer <your_token_here>
+Authorization: bearer <your_token_here>
 
 ---
 
-## 📘 API Docs
-
-
----
 
 ## 📘 API Docs
 
@@ -91,14 +87,14 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 Use Faker to insert test users & courses:
 
 ```bash
-python app/utils/seeder.py
+python app/utils/faker_seeder_script.py
 
 
 
 📦 Installation (Local Dev)
 
 # Clone the repo
-git clone https://github.com/yourusername/mindforge.git
+git clone https://github.com/Farzana-R/MindForge.git
 cd mindforge
 
 # Create and activate virtual environment
@@ -131,7 +127,7 @@ uvicorn app.main:app --reload
 
 
 🧪 Testing Scenarios
-Create 50–100 fake users (students + instructors)
+Create 1000+ fake users (students + instructors)
 
 Login and test protected routes via Swagger
 
