@@ -76,11 +76,6 @@ class EnrollmentModel:
     @classmethod
     async def get_enrollments(cls, user_id: str, course_id: str):
         """Retrieve enrollment for a specific user in a specific course."""
-        try:
-            user_id = ObjectId(user_id)
-            course_id = ObjectId(course_id)
-        except errors.InvalidId:
-            raise HTTPException(status_code=400, detail="Invalid user_id or course_id format")
         
         enrollment = await cls.collection.find_one({
             "user_id": user_id,
