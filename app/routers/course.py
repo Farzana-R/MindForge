@@ -64,7 +64,7 @@ async def list_courses(
     category: Optional[str] = Query(
         None, description="Filter by course category"),
     instructor: Optional[str] = Query(
-        None, description="Filter by instructor name"),
+        None, description="Filter by instructor email"),
     search: Optional[str] = Query(
         None, description="Search courses by title or description"),
     sort_by: Optional[str] = Query(

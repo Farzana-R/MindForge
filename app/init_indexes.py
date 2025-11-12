@@ -7,7 +7,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import ASCENDING, TEXT
 
 
-MONGO_URL = "mongodb://localhost:27017"
+MONGO_URL = "mongodb://mongo:27017"
 DB_NAME = "mindforge_db"
 
 

@@ -13,6 +13,10 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
 
+    # Add these lines:
+    ADMIN_PASSWORD: str
+    USER_PASSWORD: str
+
     class Config:
         """ Pydantic settings configuration """
         env_file = ".env"
