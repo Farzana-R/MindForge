@@ -1,5 +1,4 @@
-"""Defines Pydantic models for course data validation and serialization.
-"""
+"""Defines Pydantic models for course data validation and serialization."""
 
 from typing import Optional
 

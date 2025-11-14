@@ -1,5 +1,5 @@
 """Faker Seeder Script for MindForge LMS
-      (Python + Motor)"""
+(Python + Motor)"""
 
 import asyncio
 import random

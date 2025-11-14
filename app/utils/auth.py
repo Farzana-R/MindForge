@@ -1,5 +1,5 @@
 """Utility functions for authentication, including password hashing and
- JWT token creation."""
+JWT token creation."""
 
 from datetime import datetime, timedelta, timezone
 
