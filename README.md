@@ -2,33 +2,63 @@
 
 [![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Backend-teal?logo=fastapi)](https://fastapi.tiangolo.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Database-brightgreen?logo=mongodb)](https://www.mongodb.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-brightgreen?logo=mongodb)](https://www.mongodb.com/)
+[![CI](https://img.shields.io/github/actions/workflow/status/Farzana-R/MindForge/ci.yml?label=CI%20Checks)](https://github.com/Farzana-R/MindForge/actions)
+[![Code Style: Black](https://img.shields.io/badge/Code%20Style-Black-black?logo=python)](https://github.com/psf/black)
+[![Linting: Flake8](https://img.shields.io/badge/Linting-Flake8-red)](https://flake8.pycqa.org/)
+[![Imports: isort](https://img.shields.io/badge/Imports-isort-blue)](https://pycqa.github.io/isort/)
+[![Pre-commit](https://img.shields.io/badge/Pre--commit-Enabled-orange?logo=precommit)](https://pre-commit.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-**MindForge** is a modular, secure Learning Management System (LMS) backend built using FastAPI and MongoDB.  
-It supports user registration, role-based access, JWT authentication, and will scale to handle course and quiz management for thousands of users.
+
+**MindForge** is a modular, secure Learning Management System (LMS) backend built with **FastAPI**, **Motor (MongoDB)**, **JWT authentication**, and modern DevOps practices like **CI/CD pipelines**, **pre-commit hooks**, and **automatic code linting & formatting**.
+
+It is designed for scalability, clean architecture, and production-like workflow.
+
 
 ---
 
-## ✨ Highlights
+## ✨ Features
 
-- 🔐 Secure user registration & login with hashed passwords
-- 🧾 JWT-based authentication with token expiration
-- 📁 MongoDB integration with async support (Motor)
-- 🧩 Modular code architecture for scalability
-- 🧪 Seeder script for generating test data with Faker
+### 🔐 Authentication & Authorization  
+- Secure JWT login  
+- Role-based access (Admin, Instructor, Student)  
+- OAuth2PasswordBearer authentication  
+
+### 📚 LMS Features  
+- Course CRUD  
+- Enrollment system  
+- Progress tracking  
+- Pagination, searching & filtering  
+- MongoDB operations using async Motor  
+
+### 🧪 Developer Experience  
+- 🚀 Pre-commit auto linting  
+- ✔️ Black (formatter)  
+- ✔️ Flake8 (linter)  
+- ✔️ isort (import sorter)
+- ✔️ GitHub Actions CI pipeline  
+- ✔️ Makefile automation  
+- 🔄 Docker-based local development  
+
+### 🧰 Extra Tools  
+- Faker-based seeder script  
+- Modular folder structure  
+- Environment-driven configuration 
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Backend:** FastAPI
-- **Database:** MongoDB (Motor async driver)
-- **Auth:** JWT tokens, Passlib (bcrypt)
-- **Validation:** Pydantic
-- **Testing Data:** Faker
-- **Containerization:** Docker
-
+| Layer        | Tools |
+|--------------|-----------------------------------------|
+| Backend      | FastAPI |
+| Database     | MongoDB + Motor |
+| Auth         | JWT, OAuth2 |
+| Validation   | Pydantic |
+| Dev Tools    | Black, Flake8, isort, Pre-commit |
+| CI/CD        | GitHub Actions |
+| Container    | Docker + Docker Compose |
 ---
 
 ## 📁 Folder Structure
@@ -36,35 +66,112 @@ It supports user registration, role-based access, JWT authentication, and will s
 <pre>
 fastapi-lms/
 ├── app/
-│   ├── core/       # DB connection & config
-│   ├── models/     # MongoDB operations
-│   ├── routers/    # API endpoints (modular)
-│   ├── schemas/    # Pydantic models
-│   ├── utils/      # Auth, seeders
-├── .env
-├── requirements.txt
+│   ├── core/        # DB connection, base configs
+│   ├── models/      # MongoDB operations (Motor)
+│   ├── routers/     # All API endpoints
+│   ├── schemas/     # Pydantic models
+│   ├── utils/       # Auth helpers, seeder, utilities
+│   ├── dependencies # Role & auth dependencies
+├── .github/workflows/ci.yml  # GitHub lint pipeline
+├── .pre-commit-config.yaml   # Pre-commit hooks
+├── Makefile
+├── docker-compose.yml
+├── Dockerfile
+├── .env.example
 ├── README.md
+└── requirements.txt
 </pre>
+
 
 ---
 
+## 🧹 Code Quality & Automation
+
+MindForge enforces consistent, production-level code standards using:
+
+### ✔️ Pre-commit Hooks  
+Automatically runs before each commit:
+
+- `black` (formatting)  
+- `flake8` (linting)  
+- `isort` (import sorting)  
+- `end-of-file-fixer`  
+- `trailing-whitespace`  
+
+Install Once:
+
+```bash
+pre-commit install
+```
+
+Run manually:
+```bash
+pre-commit run --all-files
+```
+
+## ✔️ Black — Auto Formatting
+
+Runs automatically or manually:
+
+```bash
+black .
+```
+
+## ✔️ Flake8 — Linting
+
+Ensure code quality:
+
+```bash
+flake8 .
+```
+
+## ✔️ isort — Import Ordering
+
+Sort imports consistently:
+
+```bash
+isort .
+```
+
+## ✔️ CI/CD Pipeline (GitHub Actions)
+
+Every push triggers:
+
+ - Black (check mode)
+ - Flake8
+ - isort
+ - (future) Automated tests
+
+
+## ✔️ Makefile Commands
+
+```bash
+make format   # Run black + isort
+make lint     # Run flake8
+make run      # Start FastAPI development server
+make docker   # Build & run with Docker
+make seed     # Seeder script
+```
+
 ## 🔐 Authentication
+### Endpoints
 
 - `POST /users/` — Register user with role
 - `POST /auth/login` — Login and receive access token
-- Include the token in headers:
 
+- Include the token in headers:
 
 Authorization: bearer <your_token_here>
 
 ---
 
 
-## 📘 API Docs
+## 📘 API Documentation
 
 FastAPI provides automatic Swagger docs:
 
 > 🔗 [http://localhost:8000/docs](http://localhost:8000/docs)
+> 🔗 [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
 ---
 
@@ -72,73 +179,83 @@ FastAPI provides automatic Swagger docs:
 
 Create a `.env` file in the root:
 
-
+```bash
 MONGO_URI=mongodb://localhost:27017
 DATABASE_NAME=mindforge_db
 SECRET_KEY=your_secret_key
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
-
+```
 
 ---
 
-## 🧪 Seed Dummy Data
+## 🧪 Seeder - Generate Dummy Data
 
 Use Faker to insert test users & courses:
 
 ```bash
 python app/utils/faker_seeder_script.py
+```
 
 
+## 📦 Installation (Local Dev)
 
-📦 Installation (Local Dev)
-
-# Clone the repo
+### Clone the repo
 git clone https://github.com/Farzana-R/MindForge.git
 cd mindforge
 
-# Create and activate virtual environment
+### Create and activate virtual environment
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install dependencies
+### Install dependencies
 pip install -r requirements.txt
 
-# Start the server
+### Start the server
 uvicorn app.main:app --reload
 
 
-🧭 Roadmap
- User registration & JWT login
+## 🐳 Docker Setup
+```bash
+docker-compose up --build
+```
+Starts:
+ - mindforge_api (FastAPI)
+ - mindforge_mongo (MongoDB)
 
- Role-based route restrictions (admin, instructor, student)
-
- Course, Quiz & Lesson CRUD
-
- Search and filters
-
- Docker + Docker Compose
-
- Data aggregations & reporting
-
- Unit & integration testing
-
- Swagger + Postman collections
+With live reload enabled.
 
 
-🧪 Testing Scenarios
-Create 1000+ fake users (students + instructors)
 
-Login and test protected routes via Swagger
+## 🧭 Roadmap
 
-Validate token expiration, role checks
+  - JWT authentication
+  - User roles & permissions
+  - Course CRUD
+  - Enrollment system
+  - Progress tracking
+  - Search, filters, pagination
+  - Pre-commit + code quality tools
+  - Makefile
+  - CI pipeline
+  - Lesson & quiz modules(need to implement)
+  - Admin reporting & analytics (need to implement)
+  - Unit tests + CI test pipeline (need to implement)
 
-Test schema validation failures
+
+## 🧪 Testing Scenarios
+
+ - Massive data creation (1000+ users)
+ - Role-based restrictions
+ - Token expiration behavior
+ - Pagination & search combinations
+ - Schema validation failures
+ - Performance tests on course listing
 
 
-📄 License
+## 📄 License
 This project is licensed under the MIT License
 
 🙋‍♀️ Author
 Built by Farzana — Python Developer
-🔗 GitHub Profile • LinkedIn
+🔗 GitHub: https://github.com/Farzana-R • LinkedIn
