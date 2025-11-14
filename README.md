@@ -20,8 +20,6 @@ It is designed for scalability, clean architecture, and production-like workflow
 
 ## ✨ Features
 
-## ✨ Features
-
 ### 🔐 Authentication & Authorization  
 - Secure JWT login  
 - Role-based access (Admin, Instructor, Student)  
@@ -202,18 +200,18 @@ python app/utils/faker_seeder_script.py
 
 ## 📦 Installation (Local Dev)
 
-# Clone the repo
+### Clone the repo
 git clone https://github.com/Farzana-R/MindForge.git
 cd mindforge
 
-# Create and activate virtual environment
+### Create and activate virtual environment
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install dependencies
+### Install dependencies
 pip install -r requirements.txt
 
-# Start the server
+### Start the server
 uvicorn app.main:app --reload
 
 
