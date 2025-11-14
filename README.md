@@ -140,5 +140,5 @@ Test schema validation failures
 This project is licensed under the MIT License
 
 🙋‍♀️ Author
-Built with ❤️ by Farzana — Python Developer & FastAPI Learner
+Built by Farzana — Python Developer
 🔗 GitHub Profile • LinkedIn

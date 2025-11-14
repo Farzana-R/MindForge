@@ -1,16 +1,18 @@
 """
 API endpoints to handle requests
 """
-from datetime import datetime, timezone
+
 import re
+from datetime import datetime, timezone
 from typing import Optional
+
 from bson import ObjectId
-from fastapi import APIRouter, Depends, Query, status, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+
+from app.dependencies.auth import admin_required, get_current_user
 from app.models.user import UserModel
 from app.schemas.user import PaginatedUsers, ProfileUpdate, UserCreate, UserOut
 from app.utils.auth import hash_password
-from app.dependencies.auth import admin_required, get_current_user
-
 
 router = APIRouter(
     prefix="/users",
@@ -22,10 +24,11 @@ router = APIRouter(
 fake_users = []
 
 
-@router.post("/admin/create-user", response_model=UserOut, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/admin/create-user", response_model=UserOut, status_code=status.HTTP_201_CREATED
+)
 async def create_user_as_admin(
-    user: UserCreate,
-    current_user: dict = Depends(get_current_user)
+    user: UserCreate, current_user: dict = Depends(get_current_user)
 ):
     """
     Admin endpoint to create any type of user (student, instructor, admin).
@@ -73,13 +76,12 @@ def new_func(user):
 @router.get("/", response_model=PaginatedUsers)
 async def list_users(
     page: int = Query(1, ge=1, description="Page number (starting from 1)"),
-    limit: int = Query(
-        10, ge=1, le=100, description="Number of users per page"),
+    limit: int = Query(10, ge=1, le=100, description="Number of users per page"),
     role: Optional[str] = Query(None, description="Filter by role"),
     gender: Optional[str] = Query(None, description="Filter by gender"),
     # email: Optional[str] = Query(None, description="Filter by exact email"),
     search: Optional[str] = Query(None, description="Search in name, email"),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user),
 ):
     """
     Retrieve all users in the system.
@@ -88,7 +90,7 @@ async def list_users(
     if current_user["role"].lower() != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Only admins can list all users."
+            detail="Only admins can list all users.",
         )
 
     # Build dynamic filter
@@ -109,14 +111,14 @@ async def list_users(
             {"email": search_regex},
         ]
     users = await UserModel.list_users(query=query, limit=limit, page=page)
-    total_users = await UserModel.count_users(query = query)
+    total_users = await UserModel.count_users(query=query)
     total_pages = (total_users + limit - 1) // limit
     return {
         "page": page,
         "limit": limit,
         "total_users": total_users,
         "total_pages": total_pages,
-        "users": users
+        "users": users,
     }
 
 
@@ -143,14 +145,12 @@ async def get_user_by_id(user_id: str):
     # validate ObjectId format
     if not ObjectId.is_valid(user_id):
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid user ID format"
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid user ID format"
         )
     user = await UserModel.get_by_id(user_id)
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
     user["_id"] = str(user["_id"])  # Convert ObjectId to string
     user.pop("password", None)
@@ -160,8 +160,7 @@ async def get_user_by_id(user_id: str):
 
 @router.patch("/user/update-profile")
 async def update_profile(
-    profile_update: ProfileUpdate,
-    current_user: dict = Depends(get_current_user)
+    profile_update: ProfileUpdate, current_user: dict = Depends(get_current_user)
 ):
     """
     Partially update the current user's profile with validation.
@@ -172,41 +171,31 @@ async def update_profile(
     if not update_data:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="No fields provided for update"
+            detail="No fields provided for update",
         )
-    await UserModel.update_user(
-        str(current_user["_id"]),
-        update_data
-    )
+    await UserModel.update_user(str(current_user["_id"]), update_data)
     updated_user = await UserModel.get_by_id(str(current_user["_id"]))
     if updated_user:
         updated_user.pop("_id", None)  # Remove _id if not needed in response
         updated_user.pop("password", None)
         return updated_user
 
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail="User not found"
-    )
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
 
 @router.delete("/admin/delete-user/{user_id}")
-async def delete_user(
-    user_id: str,
-    current_user: dict = Depends(admin_required)
-):
+async def delete_user(user_id: str, current_user: dict = Depends(admin_required)):
     """Delete a user by ID (admin only)."""
     # validate ObjectId format
     if not ObjectId.is_valid(user_id):
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid user ID format"
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid user ID format"
         )
     # prevent admin from deleting themselves
     if str(current_user["_id"]) == user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admins cannot delete themselves"
+            detail="Admins cannot delete themselves",
         )
     await UserModel.delete_user(user_id)
     return {"msg": "User deleted successfully"}

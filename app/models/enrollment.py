@@ -1,34 +1,35 @@
-"""
-"""
-from datetime import datetime, timezone
-from bson import ObjectId, errors
-from fastapi import HTTPException
-from app.core.database import db
+""" """
 
+from datetime import datetime, timezone
+
+from fastapi import HTTPException
+
+from app.core.database import db
 
 collection = db["enrollments"]
 
+
 class EnrollmentModel:
     """Model for enrollment operations."""
+
     collection = collection
 
     @classmethod
-    async def enroll_user(cls, user_id: str, course_id:str):
+    async def enroll_user(cls, user_id: str, course_id: str):
         """Enroll a user in a course."""
         # check if the user is already enrolled in this course
-        existing_enrollment = await cls.collection.find_one({
-            "user_id": user_id,
-            "course_id": course_id
-        })
+        existing_enrollment = await cls.collection.find_one(
+            {"user_id": user_id, "course_id": course_id}
+        )
         if existing_enrollment:
             return {"message": "Already enrolled in this course"}
-        
+
         enrollment_data = {
             "user_id": user_id,
             "course_id": course_id,
-            "enrolled_at": datetime.now(timezone.utc).isoformat()
+            "enrolled_at": datetime.now(timezone.utc).isoformat(),
         }
-        
+
         result = await cls.collection.insert_one(enrollment_data)
         enrollment_data["_id"] = str(result.inserted_id)
         return enrollment_data
@@ -69,23 +70,14 @@ class EnrollmentModel:
             enrollment["_id"] = str(enrollment["_id"])
             enrollments.append(enrollment)
         return enrollments
-    
-
-
 
     @classmethod
     async def get_enrollments(cls, user_id: str, course_id: str):
         """Retrieve enrollment for a specific user in a specific course."""
-        try:
-            user_id = ObjectId(user_id)
-            course_id = ObjectId(course_id)
-        except errors.InvalidId:
-            raise HTTPException(status_code=400, detail="Invalid user_id or course_id format")
-        
-        enrollment = await cls.collection.find_one({
-            "user_id": user_id,
-            "course_id": course_id
-        })
+
+        enrollment = await cls.collection.find_one(
+            {"user_id": user_id, "course_id": course_id}
+        )
 
         if not enrollment:
             raise HTTPException(status_code=404, detail="Enrollment not found")

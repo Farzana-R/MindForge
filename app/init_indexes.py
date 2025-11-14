@@ -2,10 +2,11 @@
 It creates necessary indexes on the users collection,
 to ensure efficient querying.
 """
-import asyncio
-from motor.motor_asyncio import AsyncIOMotorClient
-from pymongo import ASCENDING, TEXT
 
+import asyncio
+
+from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo import ASCENDING
 
 MONGO_URL = "mongodb://mongo:27017"
 DB_NAME = "mindforge_db"
@@ -33,7 +34,9 @@ async def create_indexes():
     await db["users"].create_index([("address", "text")])
 
     # ------- Indexes for courses collection -------
-    await db["courses"].create_index([("title", "text"), ("description", "text"), ("category", "text")])
+    await db["courses"].create_index(
+        [("title", "text"), ("description", "text"), ("category", "text")]
+    )
     await db["courses"].create_index([("instructor", ASCENDING)])
     await db["courses"].create_index([("created_at", ASCENDING)])
     await db["courses"].create_index([("category", ASCENDING)])
@@ -41,6 +44,7 @@ async def create_indexes():
     print("Indexes created successfully.")
 
     client.close()
+
 
 if __name__ == "__main__":
     asyncio.run(create_indexes())
