@@ -2,10 +2,11 @@
 MindForge FastAPI Application
 this is the main entry point for the FastAPI application.
 """
+
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
-from app.routers import user, auth, course, enrollment, progress
 
+from app.routers import auth, course, enrollment, progress, user
 
 app = FastAPI(
     title="MindForge - A place to forge new skills and knowledge",
@@ -16,15 +17,20 @@ app = FastAPI(
 app.include_router(user.router, prefix="/api/v1/users", tags=["users"])
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(course.router, prefix="/api/v1/courses", tags=["courses"])
-app.include_router(enrollment.router, prefix="/api/v1/enrollments", tags=["enrollments"])
+app.include_router(
+    enrollment.router, prefix="/api/v1/enrollments", tags=["enrollments"]
+)
 app.include_router(progress.router, prefix="/api/v1/progress", tags=["progress"])
+
 
 @app.get("/")
 def root():
     """
     Root endpoint that returns a welcome message.
     """
-    return {"message": "Welcome to MindForge - A place to forge new skills and knowledge!"}
+    return {
+        "message": "Welcome to MindForge - A place to forge new skills and knowledge!"
+    }
 
 
 def custom_openapi():
@@ -44,11 +50,7 @@ def custom_openapi():
     )
 
     openapi_schema["components"]["securitySchemes"] = {
-        "BearerAuth": {
-            "type": "http",
-            "scheme": "bearer",
-            "bearerFormat": "JWT"
-        }
+        "BearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
     }
 
     # Add global security requirement

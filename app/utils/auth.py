@@ -1,10 +1,13 @@
-"""Utility functions for authentication, including password hashing and JWT token creation."""
-from datetime import datetime, timedelta, timezone
-from passlib.context import CryptContext
-from jose import jwt, JWTError
-from fastapi import HTTPException, status
-from app.core.config import settings
+"""Utility functions for authentication, including password hashing and
+ JWT token creation."""
 
+from datetime import datetime, timedelta, timezone
+
+from fastapi import HTTPException, status
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+
+from app.core.config import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -27,8 +30,9 @@ def create_access_token(data: dict, expires_delta: int = None):
         expires_delta (int, optional): The number of minutes until the token expires.
             Defaults to settings.ACCESS_TOKEN_EXPIRE_MINUTES."""
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + \
-        timedelta(minutes=expires_delta or settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now(timezone.utc) + timedelta(
+        minutes=expires_delta or settings.ACCESS_TOKEN_EXPIRE_MINUTES
+    )
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
@@ -36,7 +40,9 @@ def create_access_token(data: dict, expires_delta: int = None):
 def decode_access_token(token: str):
     """Decode a JWT access token and return the payload."""
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
         return payload
     except JWTError as exc:
         raise HTTPException(

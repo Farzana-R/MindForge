@@ -1,12 +1,14 @@
 import asyncio
-from motor.motor_asyncio import AsyncIOMotorClient
-from bson import ObjectId
 from datetime import datetime
+
 import bcrypt
+from bson import ObjectId
+from motor.motor_asyncio import AsyncIOMotorClient
 
 MONGO_URL = "mongodb://mongo:27017"
 DB_NAME = "mindforge_db"
 COLLECTION = "users"
+
 
 async def create_admin():
     client = AsyncIOMotorClient(MONGO_URL)
@@ -20,7 +22,7 @@ async def create_admin():
         return
 
     # password hashing
-    plain_password = "Admin@123"   # you can change this
+    plain_password = "Admin@123"  # you can change this
     hashed_password = bcrypt.hashpw(plain_password.encode("utf-8"), bcrypt.gensalt())
 
     admin_user = {

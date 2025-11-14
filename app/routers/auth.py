@@ -1,12 +1,14 @@
 """Authentication and User Management Router"""
-from datetime import datetime, timezone
-from fastapi import APIRouter, status, HTTPException, Depends
-from fastapi.security import OAuth2PasswordRequestForm
-from app.schemas.user import UserOut, UserSignup
-from app.utils.auth import hash_password, verify_password, create_access_token
-from app.schemas.token import Token
-from app.models.user import UserModel
 
+from datetime import datetime, timezone
+
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+
+from app.models.user import UserModel
+from app.schemas.token import Token
+from app.schemas.user import UserOut, UserSignup
+from app.utils.auth import create_access_token, hash_password, verify_password
 
 router = APIRouter(
     prefix="/auth",
@@ -14,12 +16,15 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+
 @router.post("/login", response_model=Token, status_code=status.HTTP_200_OK)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     """Authenticate a user and return an access token.
 
     Args:
-        form_data (OAuth2PasswordRequestForm): The form data containing email and password."""
+        form_data (OAuth2PasswordRequestForm):
+        The form data containing email and password.
+    """
     user = await UserModel.get_by_email(form_data.username)
     if not user or not verify_password(form_data.password, user["password"]):
         raise HTTPException(
@@ -29,7 +34,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
         )
     access_token = create_access_token(
         data={"sub": user["email"]},
-        expires_delta=None  # Use default expiration from settings
+        expires_delta=None,  # Use default expiration from settings
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
@@ -61,5 +66,5 @@ async def signup(user: UserSignup):
         "date_of_birth": new_user.get("date_of_birth", None),
         "phone_number": new_user.get("phone_number", None),
         "address": new_user.get("address", None),
-        "gender": new_user["gender"]
+        "gender": new_user["gender"],
     }
