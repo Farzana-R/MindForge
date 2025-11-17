@@ -33,6 +33,11 @@ def root():
     }
 
 
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
+
 def custom_openapi():
     """Generate custom OpenAPI schema for the application.
 
