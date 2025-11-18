@@ -3,10 +3,25 @@ MindForge FastAPI Application
 this is the main entry point for the FastAPI application.
 """
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 
 from app.routers import auth, course, enrollment, progress, user
+from app.utils.initialize_admin import create_initial_admin
+
+
+# ---------------------------
+# Lifespan event handler (replaces @app.on_event)
+# ---------------------------
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    await create_initial_admin()
+    yield
+    # Shutdown (if needed, add cleanup here later)
+
 
 app = FastAPI(
     title="MindForge - A place to forge new skills and knowledge",
@@ -14,6 +29,9 @@ app = FastAPI(
         courses, and user interactions.",
 )
 
+# ---------------------------
+# Include routers
+# ---------------------------
 app.include_router(user.router, prefix="/api/v1/users", tags=["users"])
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(course.router, prefix="/api/v1/courses", tags=["courses"])
@@ -21,6 +39,10 @@ app.include_router(
     enrollment.router, prefix="/api/v1/enrollments", tags=["enrollments"]
 )
 app.include_router(progress.router, prefix="/api/v1/progress", tags=["progress"])
+
+# ---------------------------
+# Root endpoint
+# ---------------------------
 
 
 @app.get("/")
@@ -33,11 +55,17 @@ def root():
     }
 
 
+# ---------------------------
+# Healthcheck endpoint (for Render)
+# ---------------------------
 @app.get("/health")
 async def health():
     return {"status": "ok"}
 
 
+# ---------------------------
+# Custom OpenAPI
+# ---------------------------
 def custom_openapi():
     """Generate custom OpenAPI schema for the application.
 
