@@ -10,7 +10,7 @@ class Settings(BaseSettings):
 
     Project_Name: str = "MindForge"
     MONGO_URL: str
-    DATABASE_NAME: str = "mindforge_db"
+    DB_NAME: str = "mindforge_db"
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
