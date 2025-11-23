@@ -46,4 +46,4 @@ async def create_initial_admin():
 
     await users_collection.insert_one(admin_user)
 
-    print(f"✅ Admin created successfully: {admin_email}")
+    print(f"Admin created successfully: {admin_email}")
