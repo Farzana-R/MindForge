@@ -6,6 +6,6 @@ from app.core.config import settings
 
 client = AsyncIOMotorClient(settings.MONGO_URL)
 
-db = client[settings.DATABASE_NAME]
+db = client[settings.DB_NAME]
 
 courses_collection = db["courses"]

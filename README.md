@@ -196,7 +196,7 @@ Create a `.env` file in the root:
 
 ```bash
 MONGO_URI=mongodb://localhost:27017
-DATABASE_NAME=mindforge_db
+DB_NAME=mindforge_db
 SECRET_KEY=your_secret_key
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
