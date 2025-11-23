@@ -9,7 +9,7 @@ class ProgressModel:
     collection = collection
 
     @classmethod
-    async def update_progress(cls, user_id: str, course_id: str, progress: dict):
+    async def update_progress(cls, user_id: str, course_id: str, progress: int):
         """Update or create a user's progress in a course"""
         if progress < 0 or progress > 100:
             raise ValueError("progress must be between 0 and 100")

@@ -28,7 +28,7 @@ router = APIRouter(
 
 @router.post("/", response_model=CourseOut)
 async def create_course(
-    course: CourseCreate, user=Depends(require_role("instructor", "admin"))
+    course: CourseCreate, user=Depends(require_role(["instructor", "admin"]))
 ):
     """Create a new course."""
     course_data = course.model_dump()
@@ -98,7 +98,7 @@ async def list_courses(
 async def update_course(
     course_id: str,
     course: CourseUpdate,
-    user=Depends(require_role("instructor", "admin")),
+    user=Depends(require_role(["instructor", "admin"])),
 ):
     """Update an existing course."""
     existing_course = await CourseModel.get_course_by_id(course_id)
@@ -129,7 +129,7 @@ async def update_course(
 
 @router.delete("/{course_id}", status_code=200)
 async def delete_course(
-    course_id: str, user=Depends(require_role("instructor", "admin"))
+    course_id: str, user=Depends(require_role(["instructor", "admin"]))
 ):
     """Delete a course by its ID.
     Only the course creator or an admin can delete it."""

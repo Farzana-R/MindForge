@@ -54,9 +54,11 @@ class UserModel:
             .skip(skip)
             .limit(limit)
         )
-        users = []
+        users: list[dict] = []
         async for user in cursor:
-            users.append(cls._format_user(user))
+            formatted_user = cls._format_user(user)
+            if formatted_user is not None:
+                users.append(formatted_user)
         return users
 
     @classmethod

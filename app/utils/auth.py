@@ -2,6 +2,7 @@
 JWT token creation."""
 
 from datetime import datetime, timedelta, timezone
+from typing import Optional
 
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
@@ -22,7 +23,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def create_access_token(data: dict, expires_delta: int = None):
+def create_access_token(data: dict, expires_delta: Optional[int] = None):
     """Create a JWT access token with an expiration time.
 
     Args:

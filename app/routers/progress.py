@@ -12,7 +12,7 @@ router = APIRouter(prefix="/progress", tags=["progress"])
 async def update_course_progress(
     course_id: str,
     progress_update: ProgressUpdate,
-    current_user=Depends(require_role("student")),
+    current_user=Depends(require_role(["student"])),
 ):
     """Update or create a user's progress in a course"""
     user_id = current_user["_id"]
