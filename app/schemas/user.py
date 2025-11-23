@@ -60,10 +60,10 @@ class UserSignup(BaseModel):
 
     email: EmailStr
     first_name: str = Field(..., min_length=1, max_length=50)
-    last_name: Optional[str] = Field(..., min_length=1, max_length=50)
+    last_name: Optional[str] = Field(max_length=50)
     date_of_birth: str
     phone_number: str = Field(..., min_length=10, max_length=15)
-    address: Optional[str] = Field(min_length=1, max_length=250)
+    address: Optional[str] = Field(max_length=250)
     gender: str = Field(
         ..., pattern="^(male|female|other)$", examples=["male", "female", "other"]
     )

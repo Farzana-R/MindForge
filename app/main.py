@@ -27,6 +27,7 @@ app = FastAPI(
     title="MindForge - A place to forge new skills and knowledge",
     description="A comprehensive platform for managing learning resources,\
         courses, and user interactions.",
+    lifespan=lifespan,
 )
 
 # ---------------------------
