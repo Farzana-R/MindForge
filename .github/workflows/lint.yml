@@ -1,3 +1,4 @@
+# syntax, formatting, standards for linting Python code using GitHub Actions
 name: Code Linting
 
 on:

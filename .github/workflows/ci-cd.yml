@@ -1,0 +1,72 @@
+# run tests, then deploy
+
+name: CI / CD - MindForge
+
+# Run on push to main and on PRs targeting main
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  ci:
+    name: CI - lint, pre-commit, tests
+    runs-on: ubuntu-latest
+    outputs:
+      tests-pass: ${{ steps.tests.outcome == 'success' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Write .env for tests
+        run: |
+          echo "MONGO_URL=${{ secrets.MONGO_URL }}" > .env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "ALGORITHM=${{ secrets.ALGORITHM }}" >> .env
+          echo "ACCESS_TOKEN_EXPIRE_MINUTES=${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}" >> .env
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pre-commit pytest httpx
+
+      - name: Run pre-commit checks
+        # Allow failures to show lints — but fail job if pre-commit exits non-zero
+        run: |
+          pre-commit run --all-files
+
+      - name: Run tests
+        id: tests
+        run: |
+          pytest -q
+
+  deploy:
+    name: Deploy to Render (only on main)
+    needs: ci
+    if: needs.ci.result == 'success' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Trigger Render deploy
+        uses: johnbeynon/render-deploy-action@v1
+        with:
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.RENDER_API_KEY }}
