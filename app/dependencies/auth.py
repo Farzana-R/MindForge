@@ -3,6 +3,8 @@ Utility functions for authentication
 
 """
 
+from typing import Any, Dict
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
@@ -37,7 +39,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     return user
 
 
-def admin_required(current_user: UserModel = Depends(get_current_user)):
+def admin_required(current_user: Dict[str, Any] = Depends(get_current_user)):
     """Ensure the current user is an admin."""
     if current_user["role"] != "admin":
         raise HTTPException(

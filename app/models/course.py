@@ -4,6 +4,7 @@ in a MongoDB database.
 """
 
 from datetime import datetime, timezone
+from typing import Optional
 
 from bson import ObjectId, errors
 from bson.errors import InvalidId
@@ -43,14 +44,14 @@ class CourseModel:
         cls,
         skip: int = 0,
         limit: int = 10,
-        category: str = None,
-        instructor: str = None,
-        search: str = None,
-        sort_by: str = "created_at",
-        sort_order: int = -1,
+        category: Optional[str] = None,
+        instructor: Optional[str] = None,
+        search: Optional[str] = None,
+        sort_by: Optional[str] = "created_at",
+        sort_order: Optional[int] = -1,
     ):
         """Retrieve all courses with pagination, filtering, searching, and sorting."""
-        query = {}
+        query: dict = {}
         # ----------filtering-----------
         if category:
             query["category"] = category

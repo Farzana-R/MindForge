@@ -20,9 +20,6 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-# in-memory user storage for demonstration purposes
-fake_users = []
-
 
 @router.post(
     "/admin/create-user", response_model=UserOut, status_code=status.HTTP_201_CREATED
@@ -94,7 +91,7 @@ async def list_users(
         )
 
     # Build dynamic filter
-    query = {}
+    query: dict = {}
     if role:
         query["role"] = role
     if gender:

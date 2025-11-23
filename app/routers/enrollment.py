@@ -16,7 +16,7 @@ router = APIRouter(
 async def enroll_user_in_course(
     # user_id: str,
     course_id: str,
-    current_user=Depends(require_role("student")),
+    current_user=Depends(require_role(["student"])),
 ):
     """Enroll a user in a course."""
     # Check if the course exists
