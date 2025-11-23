@@ -66,7 +66,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Trigger Render deploy
-        uses: johnbeynon/render-deploy-action@v1
+        uses: johnbeynon/render-deploy-action@v0.5.0
         with:
           service-id: ${{ secrets.RENDER_SERVICE_ID }}
           api-key: ${{ secrets.RENDER_API_KEY }}
