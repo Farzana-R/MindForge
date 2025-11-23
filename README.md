@@ -3,6 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Backend-teal?logo=fastapi)](https://fastapi.tiangolo.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-brightgreen?logo=mongodb)](https://www.mongodb.com/)
+[![MongoDB Atlas](https://img.shields.io/badge/MongoDB-Atlas-brightgreen?logo=mongodb)](https://www.mongodb.com/atlas)
 [![CI](https://img.shields.io/github/actions/workflow/status/Farzana-R/MindForge/ci.yml?label=CI%20Checks)](https://github.com/Farzana-R/MindForge/actions)
 [![Code Style: Black](https://img.shields.io/badge/Code%20Style-Black-black?logo=python)](https://github.com/psf/black)
 [![Linting: Flake8](https://img.shields.io/badge/Linting-Flake8-red)](https://flake8.pycqa.org/)
@@ -10,8 +11,16 @@
 [![Pre-commit](https://img.shields.io/badge/Pre--commit-Enabled-orange?logo=precommit)](https://pre-commit.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
+---
 
-**MindForge** is a modular, secure Learning Management System (LMS) backend built with **FastAPI**, **Motor (MongoDB)**, **JWT authentication**, and modern DevOps practices like **CI/CD pipelines**, **pre-commit hooks**, and **automatic code linting & formatting**.
+# 🌐 Live Production Deployment
+
+🚀 **Production URL:**  
+👉 https://mindforge-lrnw.onrender.com/
+
+**MindForge** is a modular, secure Learning Management System (LMS) backend built with **FastAPI**, **Motor (MongoDB)**, **JWT authentication**, and modern DevOps practices like **CI/CD pipelines**, **pre-commit hooks**, and **automatic code linting & formatting** and a first-run script that **automatically creates an Admin account**.
+
+It is deployed on **Render**, using **MongoDB Atlas** as the production database
 
 It is designed for scalability, clean architecture, and production-like workflow.
 
@@ -33,18 +42,23 @@ It is designed for scalability, clean architecture, and production-like workflow
 - MongoDB operations using async Motor  
 
 ### 🧪 Developer Experience  
-- 🚀 Pre-commit auto linting  
-- ✔️ Black (formatter)  
-- ✔️ Flake8 (linter)  
-- ✔️ isort (import sorter)
-- ✔️ GitHub Actions CI pipeline  
-- ✔️ Makefile automation  
-- 🔄 Docker-based local development  
+- Pre-commit auto linting  
+- Black (formatter)  
+- Flake8 (linter)  
+- isort (import sorter)
+- GitHub CI/CD pipeline  
+- Makefile automation  
+- Docker-based local development  
 
 ### 🧰 Extra Tools  
 - Faker-based seeder script  
 - Modular folder structure  
-- Environment-driven configuration 
+- Environment-driven configuration
+
+### ☁️ Deployment  
+- FastAPI deployed on Render  
+- MongoDB Atlas cluster for production  
+- Auto-migrate + Admin creation script on startup  
 
 ---
 
@@ -53,11 +67,12 @@ It is designed for scalability, clean architecture, and production-like workflow
 | Layer        | Tools |
 |--------------|-----------------------------------------|
 | Backend      | FastAPI |
-| Database     | MongoDB + Motor |
+| Database     | MongoDB Atlas (prod),MongoDB local(dev) |
+| Driver       | Motor (Async MongoDB) |
 | Auth         | JWT, OAuth2 |
 | Validation   | Pydantic |
 | Dev Tools    | Black, Flake8, isort, Pre-commit |
-| CI/CD        | GitHub Actions |
+| CI/CD        | GitHub Actions + Render Deployment |
 | Container    | Docker + Docker Compose |
 ---
 
@@ -72,7 +87,7 @@ fastapi-lms/
 │   ├── schemas/     # Pydantic models
 │   ├── utils/       # Auth helpers, seeder, utilities
 │   ├── dependencies # Role & auth dependencies
-├── .github/workflows/ci.yml  # GitHub lint pipeline
+├── .github/workflows/ci-cd.yml  # GitHub lint pipeline
 ├── .pre-commit-config.yaml   # Pre-commit hooks
 ├── Makefile
 ├── docker-compose.yml
@@ -156,7 +171,7 @@ make seed     # Seeder script
 ## 🔐 Authentication
 ### Endpoints
 
-- `POST /users/` — Register user with role
+- `POST /auth/signup` — Register user with role student
 - `POST /auth/login` — Login and receive access token
 
 - Include the token in headers:
@@ -230,17 +245,23 @@ With live reload enabled.
 ## 🧭 Roadmap
 
   - JWT authentication
+  - Admin auto creation
   - User roles & permissions
   - Course CRUD
   - Enrollment system
   - Progress tracking
+  - MongoDB Atlas integration
   - Search, filters, pagination
   - Pre-commit + code quality tools
   - Makefile
-  - CI pipeline
+  - Render deployment
+  - CI-CD pipeline
   - Lesson & quiz modules(need to implement)
   - Admin reporting & analytics (need to implement)
   - Unit tests + CI test pipeline (need to implement)
+  - Redis caching (need to implement)
+  - WebSockets for live events (need to implement)
+  - Unit + integration tests (need to implement)
 
 
 ## 🧪 Testing Scenarios
